@@ -44,9 +44,9 @@ let componentsTab: {
 
 async function submit() {
     try {
-    let { data } = await httpController.getController(select.value)?.getData(search.value)!
-    result.value[select.value] = data
-    } catch (error:AxiosError) {
+        let { data } = await httpController.getController(select.value)?.getData(search.value)!
+        result.value[select.value] = data
+    } catch (error: any) {
         ElMessage.error(`错误代码:${error.code} ${error.message}`)
 
     }
