@@ -9,6 +9,7 @@ if( process.env.NODE_ENV === 'production'){
 	book_baseurl = "http://localhost:3000/";
 }
 
+	book_baseurl = "https://my-site-server-bay.vercel.app/";
 export abstract class IHttpClass {
   axios: AxiosInstance
   constructor(option:AxiosRequestConfig){

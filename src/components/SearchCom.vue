@@ -1,60 +1,71 @@
 <template>
-    <div class="search">
-        <el-row>
-            <el-radio-group v-model="select" size="large">
-                <el-radio-button label="book">书籍</el-radio-button>
-                <el-radio-button label="music">音乐</el-radio-button>
-            </el-radio-group>
-        </el-row>
-        <el-row>
-            <el-input v-model="search" @keyup.enter="submit">
-                <template #append>
-                    <el-button @click="submit">搜索</el-button>
-                </template>
-            </el-input>
-        </el-row>
-
-        <keep-alive>
-            <component :is="componentsTab[currentCom]" :datalist="result.book"></component>
-        </keep-alive>
-    </div>
-
+  <div class="logo">
+    <img src="" alt="" />
+  </div>
+  <div class="search">
+    <el-row>
+      <el-radio-group v-model="select" size="large">
+        <el-radio-button label="book">书籍</el-radio-button>
+        <el-radio-button label="music">音乐</el-radio-button>
+      </el-radio-group>
+    </el-row>
+    <el-row>
+      <el-input v-model="search" @keyup.enter="submit">
+        <template #append>
+          <el-button @click="submit" :disabled="submit_disabled">搜索</el-button>
+        </template>
+      </el-input>
+    </el-row>
+  </div>
+    <keep-alive>
+      <component :is="componentsTab[select]" :datalist="result.book"></component>
+    </keep-alive>
 </template>
 
 <script lang="ts" setup>
-import { ref } from 'vue';
-import BookListCom from '../components/book/BookListCom.vue';
-import { httpController, HttpContainer } from '@/controller/http.controller'
-import { ElMessage } from 'element-plus';
-import { AxiosError } from 'axios';
+import { ref, reactive, onMounted } from "vue";
+import BookListCom from "../components/book/BookListCom.vue";
+import MusicListCom from "../components/music/MusicListCom.vue"
+import { httpController, HttpContainer } from "@/controller/http.controller";
+import { ElMessage } from "element-plus";
 
-let search = ref<string>("")
-let select = ref<keyof HttpContainer>("book")
+let submit_disabled = ref<boolean>(false);
+let search = ref<string>("");
+let select = ref<keyof HttpContainer>("book");
 let result = ref({
-    book: [],
-    music: []
-})
+  book: [],
+  music: [],
+});
 
-let currentCom = ref<string>("BookListCom")
 let componentsTab: {
-    [propName: string]: any
+  [propName: string]: any;
 } = {
-    BookListCom,
-}
+  book:BookListCom,
+  music:MusicListCom,
+};
 
 async function submit() {
-    try {
-        let { data } = await httpController.getController(select.value)?.getData(search.value)!
-        result.value[select.value] = data
-    } catch (error: any) {
-        ElMessage.error(`错误代码:${error.code} ${error.message}`)
-
-    }
+  try {
+    submit_disabled.value = true;
+    let { data } = await httpController
+      .getController(select.value)
+      ?.getData(search.value)!;
+    result.value[select.value] = data;
+  } catch (error: any) {
+    ElMessage.error(`错误代码:${error.code} ${error.message}`);
+  } finally {
+    submit_disabled.value = false;
+  }
 }
+
 </script>
 
 <style scoped lang="less">
-.el-input {
+  .search {
+    box-sizing: border-box;
+    padding-left: 200px;
+  }
+  .search .el-input{
     width: 50vw;
-}
+  }
 </style>

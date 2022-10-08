@@ -11,8 +11,8 @@
 
 <script setup lang="ts">
 
-import SearchCom from './components/SearchCom.vue';
-import BookListCom from './components/book/BookListCom.vue';
+// import SearchCom from './components/SearchCom.vue';
+// import BookListCom from './components/book/BookListCom.vue';
 
 </script>
 
@@ -21,7 +21,7 @@ import BookListCom from './components/book/BookListCom.vue';
   display: flex;
   flex-flow: column nowrap;
   justify-content: center;
-  align-items: center;
+  align-items: stretch;
   width: 80vw;
 }
 
