@@ -1,12 +1,13 @@
 <template>
-  <el-container>
-    <el-header>
-      <router-link :to="{path:'search'}"></router-link>
-    </el-header>
-    <el-main>
-      <router-view></router-view>
-    </el-main>
-</el-container>
+	<el-container>
+		<el-header>
+			<router-link :to="{path:'/search'}">搜索</router-link>
+			<a href="https://50project-practise.vercel.app/" target="_blank">练习</a>
+		</el-header>
+		<el-main>
+			<router-view></router-view>
+		</el-main>
+	</el-container>
 </template>
 
 <script setup lang="ts">
@@ -17,12 +18,29 @@
 </script>
 
 <style scoped lang="less">
-.el-main {
-  display: flex;
-  flex-flow: column nowrap;
-  justify-content: center;
-  align-items: stretch;
-  width: 80vw;
+.el-container {
+	width: 100vw;
+	height: 100vh;
 }
+
+.el-main {
+	display: flex;
+	align-self: center;
+	flex-flow: column nowrap;
+	align-items: center;
+	width: 100%;
+}
+
+.el-header {
+	display: flex;
+	flex-flow: row nowrap;
+	justify-content: flex-start;
+	align-items: center;
+	border-bottom: 1px solid #e3e3e3;
+}
+
+ .el-header :nth-child(n) {
+	margin: 0 10px; 
+ }
 
 </style>

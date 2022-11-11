@@ -4,8 +4,8 @@ const router = createRouter({
   history: createWebHistory(),
 
   routes: [
-    { path: "/", redirect: "/search" },
-    { path: "/search", component: () => import("../components/SearchCom.vue") },
+      { path: "/", redirect: "/search" },
+      { path: "/search",name:"搜索", component: () => import("../view/SearchCom.vue") },
   ],
 });
 
