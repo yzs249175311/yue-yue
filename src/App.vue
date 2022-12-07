@@ -8,12 +8,14 @@
 			<router-view></router-view>
 		</el-main>
 	</el-container>
+	<MusicPlayerCom></MusicPlayerCom>
 </template>
 
 <script setup lang="ts">
 
 // import SearchCom from './components/SearchCom.vue';
 // import BookListCom from './components/book/BookListCom.vue';
+ import MusicPlayerCom from './components/music-player/index.vue'
 
 </script>
 

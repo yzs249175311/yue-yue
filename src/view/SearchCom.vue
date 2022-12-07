@@ -1,6 +1,6 @@
 <template>
 	<div class="logo">
-		<img src="../assert/logo.png" alt="logo" />
+		<img src="../assets/logo.png" alt="logo" />
 	</div>
 	<div class="search">
 		<el-row>
