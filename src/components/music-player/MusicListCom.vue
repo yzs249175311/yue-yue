@@ -1,6 +1,6 @@
 <template>
 	<Teleport to="#app">
-		<el-drawer v-model="drawer" title="播放列表" direction="ltr" :before-close="handleClose" >
+		<el-drawer v-model="drawer" title="播放列表" direction="ltr" :before-close="handleClose">
 			<el-table :data="musicList" height="250" style="width: 100%">
 				<el-table-column prop="name" label="歌曲" />
 				<el-table-column prop="author" label="作者" />

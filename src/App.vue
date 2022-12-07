@@ -44,5 +44,4 @@
  .el-header :nth-child(n) {
 	margin: 0 10px; 
  }
-
 </style>

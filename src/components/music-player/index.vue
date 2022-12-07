@@ -9,7 +9,7 @@
 		<el-button type="primary" @click="saveMusicList">保存列表</el-button>
 		<el-button type="primary" @click="playMusicList">播放列表</el-button>
 
-		<audio ref="musicController" controls autoplay>
+		<audio ref="musicController" >
 			<source src="@/assets/回到过去-钢琴版.mp3">
 		</audio>
 
@@ -29,14 +29,13 @@ import { Music } from '@/interface/music/music.interface'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 import { ref } from 'vue';
 
-import axios from "axios";
 import { toReactive } from "@vueuse/shared";
 import { ElMessage } from "element-plus";
 
 let store = useStore()
 let { musicList, addMusicList, saveMusicList } = toReactive(store)
 let musicPlayerToggle = ref<"close" | "open">("close")
-let currentMusicIndex = ref(0)
+let currentMusicIndex = ref<null|number>(null)
 
 let dialogVisible = ref(false)
 let musicController = ref(null)
@@ -55,24 +54,22 @@ let musicPlayPause = () => {
 	playerState.value ? musicPause() : musicPlay()
 }
 
-let musicPlay = async (index: number = 0) => {
+let musicPlay = (index: number|null = null) => {
 	let audio: HTMLAudioElement = musicController.value!
-	let res = null;
-	if (musicList[index]?.link) {
-		res = await axios.get(musicList[index].link, { timeout: 5000 }).catch(() => {
-			ElMessage.error("链接失效！")
-			console.log(musicList[index].link)
-			return false
-		});
-	}
 
-	if (res) {
+	console.log(currentMusicIndex.value,index)
+
+	if (index!=null && musicList[index]?.link ) {
 		audio.src = musicList[index].link
 		currentMusicIndex.value = index
 	}
 
-	await audio.play()
-	playerState.value = true
+	audio.play().then(() => {
+		playerState.value = true
+	}).catch(() => {
+		ElMessage.error("链接有误，播放失败!")
+		playerState.value = false
+	})
 }
 
 let musicPause = () => {
