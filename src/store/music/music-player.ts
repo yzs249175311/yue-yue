@@ -12,7 +12,7 @@ export const useStore = defineStore("music-player", {
 	}),
 	getters: {
 		musicTitle: function (): string {
-			if (this.currentMusicIndex == null) {
+			if (this.currentMusicIndex == null || (this.musicList.length == 0)) {
 				return this.musicName + " -- " + this.musicAuthor
 			} else {
 				return this.musicList[this.currentMusicIndex].name + "--" + this.musicList[this.currentMusicIndex].author
