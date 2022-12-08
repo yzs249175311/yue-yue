@@ -2,35 +2,34 @@ import axios from 'axios'
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse, } from "axios";
 
 //const book_baseurl = "http://localhost:3000/";
-let book_baseurl: string = ""
+export let baseURL: string = "http://localhost:3000/"
+
 if (process.env.NODE_ENV === 'production') {
-	book_baseurl = "https://my-site-server-bay.vercel.app/";
-} else {
-	book_baseurl = "http://localhost:3000/";
+	baseURL = "https://my-site-server-bay.vercel.app/";
 }
 
-export abstract class IHttpClass {
-	axios: AxiosInstance
-	constructor(option: AxiosRequestConfig) {
-		this.axios = axios.create(option);
-	};
-
-	abstract request(option: AxiosRequestConfig): Promise<AxiosResponse<any, any>>;
-
-	abstract getData(name: string): Promise<AxiosResponse<any, any>>;
+let option: AxiosRequestConfig = {
+	baseURL,
 }
 
-class BookHttp extends IHttpClass {
+
+export interface IHttpClass {
+
+	getData(name: string): Promise<AxiosResponse<any, any>>;
+
+}
+
+class BookHttp implements IHttpClass {
+
+	private axios: AxiosInstance
+
 	constructor(option: AxiosRequestConfig) {
-		super(option)
+		this.axios = axios.create(option)
 	}
 
-	request(option: AxiosRequestConfig): Promise<AxiosResponse<any, any>> {
-		return this.axios(option);
-	}
 
 	getData(bookName: string): Promise<AxiosResponse<any, any>> {
-		return bookhttp.request({
+		return this.axios({
 			url: `books/search`,
 			params: {
 				bookName,
@@ -39,24 +38,32 @@ class BookHttp extends IHttpClass {
 	}
 }
 
-class MusicHttp extends IHttpClass {
-	constructor(option: AxiosRequestConfig) {
-		super(option)
-	}
+class MusicHttp implements IHttpClass {
 
-	request(option: AxiosRequestConfig): Promise<AxiosResponse<any, any>> {
-		return this.axios(option);
+	private axios: AxiosInstance
+
+	constructor(option: AxiosRequestConfig) {
+		this.axios = axios.create(option)
 	}
 
 	getData(musicName: string): Promise<AxiosResponse<any, any>> {
-		return bookhttp.request({
+		return this.axios({
 			url: `music/search`,
 			params: {
 				musicName,
 			},
 		});
 	}
+
+	getSource(link: string) {
+		return this.axios({
+			url: `music/getSource`,
+			params: {
+				link,
+			},
+		})
+	}
 }
 
-export let bookhttp = new BookHttp({ baseURL: book_baseurl })
-export let musichttp = new MusicHttp({ baseURL: book_baseurl })
+export let bookhttp = new BookHttp(option)
+export let musichttp = new MusicHttp(option)
