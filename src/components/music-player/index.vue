@@ -10,7 +10,7 @@
 			<el-button type="primary" @click="saveMusicList">保存列表</el-button>
 			<el-button type="primary" @click="playMusicList">播放列表</el-button>
 			<span class="title">
-				{{  musicTitle  }}
+				{{ musicTitle }}
 			</span>
 			<audio ref="musicController">
 				<source src="@/assets/回到过去-钢琴版.mp3">
@@ -19,14 +19,13 @@
 			<font-awesome-icon icon="fa-solid fa-circle" class="toggle" style="border:0px;"
 				@click="toggleMusicPlayerButton" />
 
-
-			<MusicListComVue v-model:drawer="playMusicListVisible" @playIndex="musicPlay"></MusicListComVue>
+			<MusicPlayerListComVue v-model:drawer="playMusicListVisible" @playIndex="musicPlay"></MusicPlayerListComVue>
 		</div>
 	</Teleport>
 </template>
 
 <script lang="ts" setup >
-import MusicListComVue from "./MusicListCom.vue";
+import MusicPlayerListComVue from "./MusicPlayerListCom.vue";
 import { useStore } from '@/store/music/music-player'
 import { Music } from '@/interface/music/music.interface'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
@@ -85,11 +84,11 @@ addMusicList(JSON.parse(localStorage.getItem("musicList") as string) as Music[])
 
 onMounted(() => {
 	setMusicPlayer(musicController.value as HTMLAudioElement)
-	 musicController.value?.addEventListener("play",() => {
-		 musicState.value = true
+	musicController.value?.addEventListener("play", () => {
+		musicState.value = true
 	})
-	 musicController.value?.addEventListener("ended",() => {
-		 musicState.value = false
+	musicController.value?.addEventListener("ended", () => {
+		musicState.value = false
 	})
 })
 

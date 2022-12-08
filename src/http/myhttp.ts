@@ -16,7 +16,8 @@ let option: AxiosRequestConfig = {
 export interface IHttpClass {
 
 	getData(name: string): Promise<AxiosResponse<any, any>>;
-
+	getSource?(link: string): Promise<AxiosResponse<any, any>>; 
+	
 }
 
 class BookHttp implements IHttpClass {

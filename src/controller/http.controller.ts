@@ -12,8 +12,8 @@ class HttpController{
         this.httpContainer.music = musichttp
     }
 
-    getController(type: keyof(HttpContainer)){
-        return this.httpContainer[type]
+    getController(type: keyof(HttpContainer)): IHttpClass{
+        return this.httpContainer[type]!
     }
 }
 
