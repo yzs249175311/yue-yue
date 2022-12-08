@@ -4,10 +4,20 @@ import path from "path"
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [vue()],
-  resolve:{
-    alias:{
-      "@": path.resolve(__dirname,"./src")
-     }
-  },
+	plugins: [vue()],
+	resolve: {
+		alias: {
+			"@": path.resolve(__dirname, "./src")
+		}
+	},
+	server: {
+		port: 5173,
+		proxy: {
+			"/music": {
+				target: "https://tonzhon.com",
+				changeOrigin: true,
+				rewrite: (path) => path.replace(/^\/music/,"") ,
+			}
+		}
+	}
 })

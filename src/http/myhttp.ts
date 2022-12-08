@@ -9,8 +9,6 @@ if (process.env.NODE_ENV === 'production') {
 	book_baseurl = "http://localhost:3000/";
 }
 
-book_baseurl = "https://my-site-server-bay.vercel.app/";
-
 export abstract class IHttpClass {
 	axios: AxiosInstance
 	constructor(option: AxiosRequestConfig) {
@@ -41,5 +39,24 @@ class BookHttp extends IHttpClass {
 	}
 }
 
+class MusicHttp extends IHttpClass {
+	constructor(option: AxiosRequestConfig) {
+		super(option)
+	}
+
+	request(option: AxiosRequestConfig): Promise<AxiosResponse<any, any>> {
+		return this.axios(option);
+	}
+
+	getData(musicName: string): Promise<AxiosResponse<any, any>> {
+		return bookhttp.request({
+			url: `music/search`,
+			params: {
+				musicName,
+			},
+		});
+	}
+}
 
 export let bookhttp = new BookHttp({ baseURL: book_baseurl })
+export let musichttp = new MusicHttp({ baseURL: book_baseurl })

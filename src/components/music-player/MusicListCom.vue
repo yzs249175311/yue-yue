@@ -1,7 +1,7 @@
 <template>
-	<Teleport to="#app">
+	<Teleport to="body">
 		<el-drawer v-model="drawer" title="播放列表" direction="ltr" :before-close="handleClose">
-			<el-table :data="musicList" height="250" style="width: 100%">
+			<el-table :data="musicList" style="width: 100%">
 				<el-table-column prop="name" label="歌曲" />
 				<el-table-column prop="author" label="作者" />
 				<el-table-column label="操作">
@@ -20,20 +20,21 @@ import { useStore } from "@/store/music/music-player"
 import { toReactive } from "@vueuse/shared";
 
 defineProps(["drawer"])
-let emits = defineEmits(["update:drawer","playIndex"])
+let emits = defineEmits(["update:drawer", "playIndex"])
 
-let { musicList,deleteMusic } = toReactive(useStore())
+let { musicList, deleteMusic, saveMusicList } = toReactive(useStore())
 
 let handleClose = (done: () => void) => {
 	emits("update:drawer", false)
+	saveMusicList()
 	done()
 }
-let handleDelete = (index:number) => {
-	 deleteMusic(index)
+let handleDelete = (index: number) => {
+	deleteMusic(index)
 }
 
-let handlePlay = (index:number) => {
-	 emits("playIndex",index)
+let handlePlay = (index: number) => {
+	emits("playIndex", index)
 }
 </script>
 

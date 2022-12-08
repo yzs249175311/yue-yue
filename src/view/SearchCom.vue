@@ -18,12 +18,12 @@
 		</el-row>
 	</div>
 	<keep-alive>
-		<component :is="componentsTab[select]" :datalist="result.book"></component>
+		<component :is="componentsTab[select]" :datalist="result[select]"></component>
 	</keep-alive>
 </template>
 
 <script lang="ts" setup>
-import { ref, reactive, onMounted } from "vue";
+import { ref } from "vue";
 import BookListCom from "../components/book/BookListCom.vue";
 import MusicListCom from "../components/music/MusicListCom.vue"
 import { httpController, HttpContainer } from "@/controller/http.controller";

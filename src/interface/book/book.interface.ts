@@ -6,3 +6,4 @@ export interface Book {
     author?:string,
     image?:string,
 }
+

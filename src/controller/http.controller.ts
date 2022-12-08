@@ -1,13 +1,15 @@
-import {bookhttp, IHttpClass} from "@/http/myhttp"
+import {bookhttp,musichttp, IHttpClass} from "@/http/myhttp"
 
 export interface HttpContainer{
     book?:IHttpClass
+    music?:IHttpClass
 }
 
 class HttpController{
     httpContainer: HttpContainer = {}
-    constructor(bookhttp:IHttpClass){
+    constructor(bookhttp:IHttpClass,musichttp:IHttpClass){
         this.httpContainer.book = bookhttp
+        this.httpContainer.music = musichttp
     }
 
     getController(type: keyof(HttpContainer)){
@@ -15,4 +17,4 @@ class HttpController{
     }
 }
 
-export let httpController = new HttpController(bookhttp)
+export let httpController = new HttpController( bookhttp,musichttp )
