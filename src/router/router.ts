@@ -5,7 +5,7 @@ const router = createRouter({
 
   routes: [
       { path: "/", redirect: "/search" },
-      { path: "/search",name:"搜索", component: () => import("../view/SearchCom.vue") },
+      { path: "/search",name:"搜索", component: () => import("@/view/SearchCom.vue") },
   ],
 });
 

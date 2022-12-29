@@ -1,8 +1,9 @@
 <template>
 	<el-container>
-		<el-header>
+		<el-header id="nav">
 			<router-link :to="{path:'/search'}">搜索</router-link>
 			<a href="https://50project-practise.vercel.app/" target="_blank">练习</a>
+			<div id="music-title"></div>
 		</el-header>
 		<el-main>
 			<router-view></router-view>
@@ -39,6 +40,10 @@
 	justify-content: flex-start;
 	align-items: center;
 	border-bottom: 1px solid #e3e3e3;
+
+	#music-title {
+		margin-left: auto;
+	}
 }
 
  .el-header :nth-child(n) {

@@ -1,23 +1,31 @@
 <template>
 	<Teleport to="body">
 		<div :class="['music-container', musicPlayerToggle]">
-			<el-button type="primary">上一首</el-button>
-			<el-button type="primary" @click="musicPlayPause">
-				{{ musicState ? "暂停" : "播放" }}
-			</el-button>
-			<el-button type="primary">下一首</el-button>
-			<el-button type="primary" @click="dialogVisible = !dialogVisible">添加音乐</el-button>
-			<el-button type="primary" @click="saveMusicList">保存列表</el-button>
-			<el-button type="primary" @click="playMusicList">播放列表</el-button>
-			<span class="title">
-				{{ musicTitle }}
-			</span>
+			<div class="controlPanel">
+				<el-button type="primary" @click="musicPrev"><font-awesome-icon
+						icon="fa-solid fa-backward" /></el-button>
+				<el-button type="primary" @click="musicPlayPause" style="width: 100px;">
+					<font-awesome-icon icon="fa-solid fa-play" v-show="!musicState" />
+					<font-awesome-icon icon="fa-solid fa-pause" v-show="musicState" />
+				</el-button>
+				<el-button type="primary" @click="musicNext"><font-awesome-icon
+						icon="fa-solid fa-forward" /></el-button>
+				<el-button type="primary" @click="addCurrentMusic">添加音乐</el-button>
+				<el-button type="primary" @click="saveMusicList">保存列表</el-button>
+				<el-button type="primary" @click="playMusicList">播放列表</el-button>
+			</div>
+			<Teleport to="#music-title">
+				<div class="title">
+					<div class="content" :class="!musicState                                                              ?                                                              'paused'                                                              :                                                              ''">
+						{{ musicTitle }}
+					</div>
+				</div>
+			</Teleport>
 			<audio ref="musicController">
 				<source src="@/assets/回到过去-钢琴版.mp3">
 			</audio>
-
-			<font-awesome-icon icon="fa-solid fa-circle" class="toggle" style="border:0px;"
-				@click="toggleMusicPlayerButton" />
+			<font-awesome-icon icon="fa-solid fa-music" class="toggle" style="border:0px;"
+				@click="toggleMusicPlayerButton" @mouseenter="musicPlayerToggle = 'open'" />
 
 			<MusicPlayerListComVue v-model:drawer="playMusicListVisible" @playIndex="musicPlay"></MusicPlayerListComVue>
 		</div>
@@ -35,12 +43,11 @@ import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
 
 let store = useStore()
-let { musicList, musicState, musicTitle } = storeToRefs(store)
-let { addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex } = store
+let { musicList, musicState, musicTitle, currentMusicIndex, musicName, musicAuthor } = storeToRefs(store)
+let { addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex, addMusic } = store
 
 let musicPlayerToggle = ref<"close" | "open">("close")
 
-let dialogVisible = ref(false)
 let musicController = ref<HTMLAudioElement>()
 let playMusicListVisible = ref(false)
 let toggleMusicPlayerButton = function () {
@@ -57,7 +64,6 @@ let musicPlayPause = () => {
 
 let musicPlay = (index: number | null = null) => {
 	let audio: HTMLAudioElement = musicController.value!
-
 
 	if (index != null && musicList.value[index]?.link) {
 		audio.src = musicList.value[index].link
@@ -76,8 +82,29 @@ let musicPause = () => {
 	audio.pause()
 }
 
+let musicPrev = () => {
+	musicPlay(currentMusicIndex.value! - 1)
+}
+
+let musicNext = () => {
+	musicPlay(currentMusicIndex.value! + 1)
+}
+
 let playMusicList = () => {
 	playMusicListVisible.value = true
+}
+
+let addCurrentMusic = () => {
+	if (musicName.value && musicAuthor.value && musicController.value?.src) {
+		addMusic({
+			name: musicName.value,
+			author: musicAuthor.value,
+			link: musicController.value!.src,
+		})
+		ElMessage.success("添加成功")
+	} else {
+		ElMessage.error("添加失败")
+	}
 }
 
 addMusicList(JSON.parse(localStorage.getItem("musicList") as string) as Music[])
@@ -124,6 +151,49 @@ onMounted(() => {
 
 	&.close {
 		transform: translateY(85%);
+	}
+
+}
+
+.title {
+	display: flex;
+	overflow-x: hidden;
+	margin-left: auto;
+	margin-right: 2em;
+	padding: 10px 10px;
+	max-width: 20em;
+	height: 100%;
+	outline: none;
+
+	.content {
+		font-size: 1.2em;
+		white-space: nowrap;
+		color: #fff;
+		text-shadow: 0 0 1px #03bcf4,
+			0 0 2px #03bcf4,
+			0 0 5px #03bcf4,
+			0 0 9px #03bcf4;
+		-webkit-box-reflect: below 0px linear-gradient(transparent, #0009);
+		user-select: none;
+		animation: titleScroll 10s cubic-bezier(0.1,0.4,0.9,0.6) infinite;
+	}
+
+	.content.paused {
+		animation-play-state: paused;
+	}
+}
+
+@keyframes titleScroll {
+	from {
+		transform: translateX(150%);
+		filter: hue-rotate(0);
+		-webkit-box-reflect: below 0px linear-gradient(transparent, #0009);
+	}
+
+	to {
+		transform: translateX(-150%);
+		filter: hue-rotate(360deg);
+		-webkit-box-reflect: below 0px linear-gradient(transparent, #0009);
 	}
 }
 </style>
