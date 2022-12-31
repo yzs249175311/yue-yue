@@ -2,30 +2,32 @@
 	<Teleport to="body">
 		<div :class="['music-container', musicPlayerToggle]">
 			<div class="controlPanel">
-				<el-button type="primary" @click="musicPrev"><font-awesome-icon
+				<el-button type="primary" @click="musicPrev" size="large" circle><font-awesome-icon
 						icon="fa-solid fa-backward" /></el-button>
-				<el-button type="primary" @click="musicPlayPause" style="width: 100px;">
+				<el-button type="primary" class="musicPlayPause" @click="musicPlayPause" size="large" circle>
 					<font-awesome-icon icon="fa-solid fa-play" v-show="!musicState" />
 					<font-awesome-icon icon="fa-solid fa-pause" v-show="musicState" />
 				</el-button>
-				<el-button type="primary" @click="musicNext"><font-awesome-icon
+				<el-button type="primary" @click="musicNext" size="large" circle><font-awesome-icon
 						icon="fa-solid fa-forward" /></el-button>
 				<el-button type="primary" @click="addCurrentMusic">添加音乐</el-button>
 				<el-button type="primary" @click="saveMusicList">保存列表</el-button>
 				<el-button type="primary" @click="playMusicList">播放列表</el-button>
 			</div>
-			<Teleport to="#music-title">
-				<div class="title">
-					<div class="content" :class="!musicState                                                              ?                                                              'paused'                                                              :                                                              ''">
-						{{ musicTitle }}
-					</div>
+
+			<div class="timePanel">
+				<el-slider v-model="currentTime" :max="duration" @input="setCurrentTime" :format-tooltip="formatTime" />
+				<div class="showtime">
+					<time>{{ currentTimeFormat }}</time>
+					<time>{{ durationFormat }}</time>
 				</div>
-			</Teleport>
+			</div>
+
 			<audio ref="musicController">
 				<source src="@/assets/回到过去-钢琴版.mp3">
 			</audio>
-			<font-awesome-icon icon="fa-solid fa-music" class="toggle" style="border:0px;"
-				@click="toggleMusicPlayerButton" @mouseenter="musicPlayerToggle = 'open'" />
+			<font-awesome-icon icon="fa-solid fa-music" class="toggle" @click="toggleMusicPlayerButton"
+				@mouseenter="musicPlayerToggle = 'open'" />
 
 			<MusicPlayerListComVue v-model:drawer="playMusicListVisible" @playIndex="musicPlay"></MusicPlayerListComVue>
 		</div>
@@ -37,19 +39,25 @@ import MusicPlayerListComVue from "./MusicPlayerListCom.vue";
 import { useStore } from '@/store/music/music-player'
 import { Music } from '@/interface/music/music.interface'
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import { onMounted, ref } from 'vue';
+import { onMounted, ref, reactive } from 'vue';
+import { formatTime } from "@/utils/formatTime"
 
 import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
 
 let store = useStore()
-let { musicList, musicState, musicTitle, currentMusicIndex, musicName, musicAuthor } = storeToRefs(store)
+let { musicList, musicState, currentMusicIndex, musicName, musicAuthor, currentTime, duration, currentTimeFormat, durationFormat } = storeToRefs(store)
 let { addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex, addMusic } = store
 
 let musicPlayerToggle = ref<"close" | "open">("close")
 
 let musicController = ref<HTMLAudioElement>()
 let playMusicListVisible = ref(false)
+
+let setCurrentTime = (e: Event) => {
+	musicController.value!.currentTime = currentTime.value
+}
+
 let toggleMusicPlayerButton = function () {
 	if (musicPlayerToggle.value == "close") {
 		musicPlayerToggle.value = "open"
@@ -107,24 +115,33 @@ let addCurrentMusic = () => {
 	}
 }
 
-addMusicList(JSON.parse(localStorage.getItem("musicList") as string) as Music[])
 
 onMounted(() => {
 	setMusicPlayer(musicController.value as HTMLAudioElement)
+
+	addMusicList(JSON.parse(localStorage.getItem("musicList") as string) as Music[])
+
 	musicController.value?.addEventListener("play", () => {
 		musicState.value = true
 	})
 	musicController.value?.addEventListener("ended", () => {
 		musicState.value = false
 	})
+	musicController.value?.addEventListener("loadeddata", ()=>{
+		duration.value = musicController.value!.duration
+	})
+	musicController.value?.addEventListener("timeupdate", (e:Event)=>{
+		currentTime.value = (<HTMLAudioElement>e.currentTarget).currentTime
+	})
 })
 
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 .music-container {
-	display: flex;
+	display: grid;
 	align-items: center;
+	grid-template-columns: repeat(3, 1fr);
 	position: fixed;
 	bottom: 0;
 	width: 100%;
@@ -134,7 +151,25 @@ onMounted(() => {
 	z-index: 999;
 	transition: all 0.4s ease;
 
-	& .toggle {
+	.controlPanel {
+		display: grid;
+		place-items: center;
+		grid-template-columns: repeat(3, 100px);
+		grid-gap: 10px;
+	}
+
+	.timePanel {
+		width: 100%;
+		display: flex;
+		flex-flow: column nowrap;
+
+		.showtime {
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	.toggle {
 		position: absolute;
 		cursor: pointer;
 		left: 50%;
@@ -153,47 +188,5 @@ onMounted(() => {
 		transform: translateY(85%);
 	}
 
-}
-
-.title {
-	display: flex;
-	overflow-x: hidden;
-	margin-left: auto;
-	margin-right: 2em;
-	padding: 10px 10px;
-	max-width: 20em;
-	height: 100%;
-	outline: none;
-
-	.content {
-		font-size: 1.2em;
-		white-space: nowrap;
-		color: #fff;
-		text-shadow: 0 0 1px #03bcf4,
-			0 0 2px #03bcf4,
-			0 0 5px #03bcf4,
-			0 0 9px #03bcf4;
-		-webkit-box-reflect: below 0px linear-gradient(transparent, #0009);
-		user-select: none;
-		animation: titleScroll 10s cubic-bezier(0.1,0.4,0.9,0.6) infinite;
-	}
-
-	.content.paused {
-		animation-play-state: paused;
-	}
-}
-
-@keyframes titleScroll {
-	from {
-		transform: translateX(150%);
-		filter: hue-rotate(0);
-		-webkit-box-reflect: below 0px linear-gradient(transparent, #0009);
-	}
-
-	to {
-		transform: translateX(-150%);
-		filter: hue-rotate(360deg);
-		-webkit-box-reflect: below 0px linear-gradient(transparent, #0009);
-	}
 }
 </style>

@@ -1,6 +1,6 @@
 <template>
 	<div class="logo">
-		<img src="../assets/logo.png" alt="logo" />
+		<music-title-com font-size="8em"></music-title-com>
 	</div>
 	<div class="search">
 		<el-row>
@@ -23,11 +23,12 @@
 </template>
 
 <script lang="ts" setup>
-import { ref } from "vue";
+import { ref,toRaw } from "vue";
 import BookListCom from "../components/book/BookListCom.vue";
 import MusicListCom from "../components/music/MusicListCom.vue"
 import { httpController, HttpContainer } from "@/controller/http.controller";
 import { ElMessage } from "element-plus";
+import MusicTitleCom from "@/components/music-player/MusicTitleCom.vue"
 
 let submit_disabled = ref<boolean>(false);
 let search = ref<string>("");
@@ -45,12 +46,13 @@ let componentsTab: {
 };
 
 async function submit() {
+	let selectedRadio = toRaw(select.value)
 	try {
 		submit_disabled.value = true;
 		let { data } = await httpController
-			.getController(select.value)
+			.getController(selectedRadio)
 			?.getData(search.value)!;
-		result.value[select.value] = data;
+		result.value[selectedRadio] = data;
 	} catch (error: any) {
 		ElMessage.error(`错误代码:${error.code} ${error.message}`);
 	} finally {
@@ -60,12 +62,21 @@ async function submit() {
 
 </script>
 
-<style scoped lang="less">
-.search .el-input {
-	width: 50vw;
+<style scoped lang="scss">
+.search {
+	margin: 10px 0;
+	.el-input {
+		width: 50vw;
+	}
 }
 
-.logo>img {
-	width: 40%;
+.logo {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 5vh 0;
+	padding: 20px;
+	width: 85%;
+	box-sizing: border-box;
 }
 </style>

@@ -26,6 +26,8 @@
     "@volar/server": "^0.32.1",
     "less": "^4.1.3",
     "less-loader": "^11.0.0",
+    "sass": "^1.57.1",
+    "sass-loader": "^13.2.0",
     "typescript": "^4.6.4",
     "vite": "^3.0.7",
     "vue-tsc": "^0.39.5"

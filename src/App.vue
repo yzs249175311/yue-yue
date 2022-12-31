@@ -3,7 +3,7 @@
 		<el-header id="nav">
 			<router-link :to="{path:'/search'}">搜索</router-link>
 			<a href="https://50project-practise.vercel.app/" target="_blank">练习</a>
-			<div id="music-title"></div>
+			<div class="music-title"></div>
 		</el-header>
 		<el-main>
 			<router-view></router-view>
@@ -14,16 +14,15 @@
 
 <script setup lang="ts">
 
-// import SearchCom from './components/SearchCom.vue';
-// import BookListCom from './components/book/BookListCom.vue';
  import MusicPlayerCom from './components/music-player/index.vue'
 
 </script>
 
-<style scoped lang="less">
+<style scoped lang="scss">
 .el-container {
 	width: 100vw;
-	height: auto;
+	min-height: 100vh;
+	overflow-x: hidden;
 }
 
 .el-main {
@@ -40,8 +39,9 @@
 	justify-content: flex-start;
 	align-items: center;
 	border-bottom: 1px solid #e3e3e3;
+	box-shadow: 0 0px 5px 1px #e3e3e3;
 
-	#music-title {
+	.music-title {
 		margin-left: auto;
 	}
 }

@@ -1,5 +1,6 @@
 import { defineStore } from "pinia"
 import { Music } from "@/interface/music/music.interface"
+import {formatTime} from "@/utils/formatTime"
 
 export const useStore = defineStore("music-player", {
 	state: () => ({
@@ -9,6 +10,8 @@ export const useStore = defineStore("music-player", {
 		musicName: "未知" as string,
 		musicAuthor: "未知" as string,
 		musicState: false,
+		currentTime: 0,
+		duration: 0,
 	}),
 	getters: {
 		musicTitle: function (): string {
@@ -17,6 +20,12 @@ export const useStore = defineStore("music-player", {
 			} else {
 				return this.musicList[this.currentMusicIndex].name + "--" + this.musicList[this.currentMusicIndex].author
 			}
+		},
+		currentTimeFormat: function(): string{
+			return formatTime(this.currentTime)
+		},
+		durationFormat: function(): string{
+			return formatTime(this.duration)
 		}
 	},
 	actions: {
@@ -27,7 +36,7 @@ export const useStore = defineStore("music-player", {
 			this.musicList.splice(index, 1)
 		},
 		addMusicList(itemList: Music[]) {
-			if (!itemList || itemList?.length == 0) {
+			if (!itemList || itemList?.length == 0 || this.musicList.length != 0) {
 				return
 			}
 			itemList.forEach((item: Music) => {
