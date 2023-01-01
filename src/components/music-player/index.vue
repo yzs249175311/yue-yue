@@ -29,7 +29,7 @@
 			<font-awesome-icon icon="fa-solid fa-music" class="toggle" @click="toggleMusicPlayerButton"
 				@mouseenter="musicPlayerToggle = 'open'" />
 
-			<MusicPlayerListComVue v-model:drawer="playMusicListVisible" @playIndex="musicPlay"></MusicPlayerListComVue>
+			<MusicPlayerListComVue ></MusicPlayerListComVue>
 		</div>
 	</Teleport>
 </template>
@@ -46,13 +46,12 @@ import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
 
 let store = useStore()
-let { musicList, musicState, currentMusicIndex, musicName, musicAuthor, currentTime, duration, currentTimeFormat, durationFormat } = storeToRefs(store)
-let { addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex, addMusic } = store
+let { musicList, musicState, currentMusicIndex, musicName, musicAuthor, currentTime, duration, currentTimeFormat, durationFormat,playMusicListVisible } = storeToRefs(store)
+let { playMusic,addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex, addMusic } = store
 
 let musicPlayerToggle = ref<"close" | "open">("close")
 
 let musicController = ref<HTMLAudioElement>()
-let playMusicListVisible = ref(false)
 
 let setCurrentTime = (e: Event) => {
 	musicController.value!.currentTime = currentTime.value
@@ -67,17 +66,7 @@ let musicPlayPause = () => {
 }
 
 let musicPlay = (index: number | null = null) => {
-	let audio: HTMLAudioElement = musicController.value!
-
-	if (index != null && musicList.value[index]?.link) {
-		audio.src = musicList.value[index].link
-		setCurrentMusicIndex(index)
-	}
-
-	audio.play().catch(() => {
-		ElMessage.error("链接有误，播放失败!")
-		musicState.value = false
-	})
+	playMusic(index)
 }
 
 let musicPause = () => {
@@ -87,11 +76,11 @@ let musicPause = () => {
 }
 
 let musicPrev = () => {
-	musicPlay(currentMusicIndex.value! - 1)
+	playMusic(currentMusicIndex.value! - 1)
 }
 
 let musicNext = () => {
-	musicPlay(currentMusicIndex.value! + 1)
+	playMusic(currentMusicIndex.value! + 1)
 }
 
 let playMusicList = () => {

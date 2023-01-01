@@ -22,7 +22,7 @@ import { httpController } from "@/controller/http.controller"
 
 defineProps(["datalist"]);
 let store = useStore()
-let { addMusic, musicPlayer, setCurrentMusicIndex, setMusicName, setMusicAuthor } = store
+let {playMusic, addMusic} = store
 
 let handlePlay = async (music: Music) => {
 	httpController.getController("music").cancel()
@@ -30,12 +30,7 @@ let handlePlay = async (music: Music) => {
 	let {data} = await httpController.getController("music").formatData!(music)
 
 	if (data && data.success) {
-		music = data?.music
-		musicPlayer.src = music.link
-		setCurrentMusicIndex(null)
-		setMusicName(music.name)
-		setMusicAuthor(music.author)
-		musicPlayer.play()
+		playMusic(data.music)
 	} else if(data?.message){
 		//有message说明不是取消请求造成的
 		ElMessage.error("链接无效,播放失败")
@@ -47,8 +42,7 @@ let handleAdd = async (music: Music) => {
 	let {data} = await httpController.getController("music").formatData!(music)
 
 	if (data.success) {
-		music = data?.music
-		addMusic(music)
+		addMusic(data.music)
 		ElMessage.success("添加《" + music.name + "》成功")
 	} else {
 		ElMessage.error("链接无效,添加失败")

@@ -1,6 +1,6 @@
 <template>
 
-		<el-drawer v-model="drawer" title="播放列表" direction="ltr" :before-close="handleClose" :append-to-body="true">
+		<el-drawer v-model="playMusicListVisible" title="播放列表" direction="ltr" :before-close="handleClose" :append-to-body="true">
 			<el-table :data="musicList" style="width: 100%">
 				<el-table-column prop="name" label="歌曲" />
 				<el-table-column prop="author" label="作者" />
@@ -17,15 +17,16 @@
 
 <script lang="ts" setup>
 import { useStore } from "@/store/music/music-player"
-import { toReactive } from "@vueuse/shared";
+import { storeToRefs } from "pinia";
 
-defineProps(["drawer"])
-let emits = defineEmits(["update:drawer", "playIndex"])
+let emits = defineEmits(["playIndex"])
 
-let { musicList, deleteMusic, saveMusicList } = toReactive(useStore())
+let store = useStore()
+let { musicList, playMusicListVisible } = storeToRefs(store)
+let {deleteMusic,saveMusicList,playMusic} = store
 
 let handleClose = (done: () => void) => {
-	emits("update:drawer", false)
+	playMusicListVisible.value = false
 	saveMusicList()
 	done()
 }
@@ -34,7 +35,7 @@ let handleDelete = (index: number) => {
 }
 
 let handlePlay = (index: number) => {
-	emits("playIndex", index)
+	playMusic(index)
 }
 </script>
 
