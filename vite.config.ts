@@ -10,14 +10,4 @@ export default defineConfig({
 			"@": path.resolve(__dirname, "./src")
 		}
 	},
-	server: {
-		port: 5173,
-		proxy: {
-			"/music": {
-				target: "https://tonzhon.com",
-				changeOrigin: true,
-				rewrite: (path) => path.replace(/^\/music/,"") ,
-			}
-		}
-	}
 })

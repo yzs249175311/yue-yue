@@ -1,6 +1,6 @@
 <template>
-	<Teleport to="body">
-		<el-drawer v-model="drawer" title="播放列表" direction="ltr" :before-close="handleClose">
+
+		<el-drawer v-model="drawer" title="播放列表" direction="ltr" :before-close="handleClose" :append-to-body="true">
 			<el-table :data="musicList" style="width: 100%">
 				<el-table-column prop="name" label="歌曲" />
 				<el-table-column prop="author" label="作者" />
@@ -12,7 +12,7 @@
 				</el-table-column>
 			</el-table>
 		</el-drawer>
-	</Teleport>
+	
 </template>
 
 <script lang="ts" setup>

@@ -1,6 +1,6 @@
 <template>
 	<Teleport to="body">
-		<el-dialog v-model="dialogVisible" title="添加音乐" width="30%" :before-close="handleClose" >
+		<el-dialog v-model="dialogVisible" title="添加音乐" :before-close="handleClose" >
 
 			<el-form :model="musicForm" label-width="auto" label-position="left">
 				<el-form-item label="音乐名:">
@@ -57,6 +57,6 @@ const handleConfirm = () => {
 
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

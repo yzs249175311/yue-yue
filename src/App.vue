@@ -1,7 +1,7 @@
 <template>
 	<el-container>
 		<el-header id="nav">
-			<router-link :to="{path:'/search'}">搜索</router-link>
+			<router-link :to="{                                                                                                                                                                        path:                                                                                                                                                                        '/search'                                                                                                                                                                        }">搜索</router-link>
 			<a href="https://50project-practise.vercel.app/" target="_blank">练习</a>
 			<div class="music-title"></div>
 		</el-header>
@@ -14,39 +14,35 @@
 
 <script setup lang="ts">
 
- import MusicPlayerCom from './components/music-player/index.vue'
+import MusicPlayerCom from './components/music-player/index.vue'
 
 </script>
 
 <style scoped lang="scss">
 .el-container {
 	width: 100vw;
-	min-height: 100vh;
-	overflow-x: hidden;
-}
-
-.el-main {
+	height: 100%;
 	display: flex;
-	align-self: center;
 	flex-flow: column nowrap;
-	align-items: center;
-	width: 100%;
-}
+	.el-header {
+		display: flex;
+		flex-flow: row nowrap;
+		justify-content: flex-start;
+		align-items: center;
+		border-bottom: 1px solid #e3e3e3;
+		box-shadow: 0 0px 5px 1px #e3e3e3;
 
-.el-header {
-	display: flex;
-	flex-flow: row nowrap;
-	justify-content: flex-start;
-	align-items: center;
-	border-bottom: 1px solid #e3e3e3;
-	box-shadow: 0 0px 5px 1px #e3e3e3;
+		.music-title {
+			margin-left: auto;
+		}
+	}
+	.el-main {
+		display: flex;
+		justify-content: flex-start;
+	}
 
-	.music-title {
-		margin-left: auto;
+	.el-header :nth-child(n) {
+		margin: 0 10px;
 	}
 }
-
- .el-header :nth-child(n) {
-	margin: 0 10px; 
- }
 </style>

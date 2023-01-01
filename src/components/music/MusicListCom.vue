@@ -1,5 +1,6 @@
 <template>
-	<el-table :data="datalist" style="width: 80%;">
+
+	<el-table :data="datalist" style="width: 80%;"  :highlight-current-row="true" @row-dblclick="handlePlay">
 		<el-table-column prop="name" label="歌曲名" />
 		<el-table-column prop="author" label="作者" />
 		<el-table-column prop="other.platform" label="平台" />
@@ -10,6 +11,7 @@
 			</template>
 		</el-table-column>
 	</el-table>
+	
 </template>
 
 <script lang="ts" setup>
@@ -59,4 +61,5 @@ let handleAdd = async (music: Music) => {
 	}
 
 }
+
 </script>

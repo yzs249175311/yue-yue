@@ -59,11 +59,7 @@ let setCurrentTime = (e: Event) => {
 }
 
 let toggleMusicPlayerButton = function () {
-	if (musicPlayerToggle.value == "close") {
-		musicPlayerToggle.value = "open"
-	} else {
-		musicPlayerToggle.value = "close"
-	}
+	musicPlayerToggle.value = musicPlayerToggle.value == "close" ? "open":"close"
 }
 
 let musicPlayPause = () => {
@@ -138,6 +134,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
+$bdcolor: #d3d3d3a3;
 .music-container {
 	display: grid;
 	align-items: center;
@@ -146,8 +143,9 @@ onMounted(() => {
 	bottom: 0;
 	width: 100%;
 	padding: 20px;
-	overflow: auto;
-	resize: both;
+	overflow: visible;
+	background-image: linear-gradient(to top, #fff,#f3f3f3,#fff);
+	border-top: 1px solid $bdcolor;
 	z-index: 999;
 	transition: all 0.4s ease;
 
@@ -172,8 +170,14 @@ onMounted(() => {
 	.toggle {
 		position: absolute;
 		cursor: pointer;
-		left: 50%;
+		left: 5%;
 		top: 0;
+		transform: translateY(-99%);
+		padding: 10px;
+		background-color: #fff;
+		border: 1px solid $bdcolor;
+		border-bottom: 0;
+		border-radius: 5px 5px 0 0;
 	}
 
 	&.open {
@@ -185,7 +189,7 @@ onMounted(() => {
 	}
 
 	&.close {
-		transform: translateY(85%);
+		transform: translateY(100%);
 	}
 
 }

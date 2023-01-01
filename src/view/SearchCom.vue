@@ -1,29 +1,31 @@
 <template>
-	<div class="logo">
-		<music-title-com font-size="8em"></music-title-com>
+	<div class="container">
+		<div class="logo">
+			<music-title-com font-size="5em"></music-title-com>
+		</div>
+		<div class="search">
+			<el-row>
+				<el-radio-group v-model="select" size="large">
+					<el-radio-button label="book">书籍</el-radio-button>
+					<el-radio-button label="music">音乐</el-radio-button>
+				</el-radio-group>
+			</el-row>
+			<el-row>
+				<el-input v-model="search" @keyup.enter="submit">
+					<template #append>
+						<el-button @click="submit" :disabled="submit_disabled">搜索</el-button>
+					</template>
+				</el-input>
+			</el-row>
+		</div>
+		<keep-alive>
+			<component :is="componentsTab[select]" :datalist="result[select]"></component>
+		</keep-alive>
 	</div>
-	<div class="search">
-		<el-row>
-			<el-radio-group v-model="select" size="large">
-				<el-radio-button label="book">书籍</el-radio-button>
-				<el-radio-button label="music">音乐</el-radio-button>
-			</el-radio-group>
-		</el-row>
-		<el-row>
-			<el-input v-model="search" @keyup.enter="submit">
-				<template #append>
-					<el-button @click="submit" :disabled="submit_disabled">搜索</el-button>
-				</template>
-			</el-input>
-		</el-row>
-	</div>
-	<keep-alive>
-		<component :is="componentsTab[select]" :datalist="result[select]"></component>
-	</keep-alive>
 </template>
 
 <script lang="ts" setup>
-import { ref,toRaw } from "vue";
+import { ref, toRaw } from "vue";
 import BookListCom from "../components/book/BookListCom.vue";
 import MusicListCom from "../components/music/MusicListCom.vue"
 import { httpController, HttpContainer } from "@/controller/http.controller";
@@ -63,20 +65,25 @@ async function submit() {
 </script>
 
 <style scoped lang="scss">
-.search {
-	margin: 10px 0;
-	.el-input {
-		width: 50vw;
-	}
-}
-
-.logo {
+.container {
 	display: flex;
-	justify-content: center;
+	flex-flow: column nowrap;
 	align-items: center;
-	margin: 5vh 0;
-	padding: 20px;
-	width: 85%;
-	box-sizing: border-box;
+	width: 100%;
+	.search {
+		.el-input {
+			width: 50vw;
+		}
+	}
+
+	.logo {
+		display: flex;
+		justify-content: center;
+		align-items: center;
+		margin: 5vh 0;
+		padding: 20px;
+		width: 85%;
+		box-sizing: border-box;
+	}
 }
 </style>
