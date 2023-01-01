@@ -18,7 +18,6 @@
 import { Music } from "@/interface/music/music.interface"
 import { useStore } from "@/store/music/music-player"
 import { ElMessage } from "element-plus";
-import {  musichttp } from "@/http/myhttp"
 import { httpController } from "@/controller/http.controller"
 
 defineProps(["datalist"]);
@@ -26,35 +25,30 @@ let store = useStore()
 let { addMusic, musicPlayer, setCurrentMusicIndex, setMusicName, setMusicAuthor } = store
 
 let handlePlay = async (music: Music) => {
-	let res = null
-	if (music.platform == "tonzhon") {
-		res = await httpController.getController("music").getSource!(music.other?.requestlink as string).catch(() => {
-			return { data: { success: false } }
-		})
-	}
+	httpController.getController("music").cancel()
 
-	let data = res?.data
+	let {data} = await httpController.getController("music").formatData!(music)
+
 	if (data && data.success) {
-		musicPlayer.src = data.data?.songSource as string
+		music = data?.music
+		musicPlayer.src = music.link
 		setCurrentMusicIndex(null)
 		setMusicName(music.name)
 		setMusicAuthor(music.author)
 		musicPlayer.play()
-	} else {
+	} else if(data?.message){
+		//有message说明不是取消请求造成的
 		ElMessage.error("链接无效,播放失败")
-	}
+	} 
 }
 
 let handleAdd = async (music: Music) => {
-	let res = null
-	if (music.platform == "tonzhon") {
-		res = await musichttp.getSource(music.other?.requestlink as string).catch(() => {
-			return { data: { success: false } }
-		})
-	}
-	let data = res?.data
+
+	let {data} = await httpController.getController("music").formatData!(music)
+
 	if (data.success) {
-		addMusic({ ...music, ...{ link: data.data?.songSource } })
+		music = data?.music
+		addMusic(music)
 		ElMessage.success("添加《" + music.name + "》成功")
 	} else {
 		ElMessage.error("链接无效,添加失败")

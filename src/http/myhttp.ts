@@ -1,6 +1,7 @@
+import { httpController } from '@/controller/http.controller';
 import axios from 'axios'
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse, } from "axios";
-
+import { Music } from "@/interface/music/music.interface"
 //const book_baseurl = "http://localhost:3000/";
 export let baseURL: string = "http://localhost:3000/"
 baseURL = "https://my-site-server-bay.vercel.app/";
@@ -17,15 +18,18 @@ let option: AxiosRequestConfig = {
 export interface IHttpClass {
 
 	getData(name: string): Promise<AxiosResponse<any, any>>;
-	getSource?(link: string): Promise<AxiosResponse<any, any>>; 
-	
+	getSource?(link: string): Promise<AxiosResponse<any, any>>;
+	cancel(): void;
+	formatData?(music: Music): any;
 }
 
 class BookHttp implements IHttpClass {
 
 	private axios: AxiosInstance
+	private abortController: AbortController
 
 	constructor(option: AxiosRequestConfig) {
+		this.abortController = new AbortController()
 		this.axios = axios.create(option)
 	}
 
@@ -36,15 +40,22 @@ class BookHttp implements IHttpClass {
 			params: {
 				bookName,
 			},
+			signal: this.abortController.signal
 		});
+	}
+
+	cancel(): void {
+		this.abortController.abort()
 	}
 }
 
 class MusicHttp implements IHttpClass {
 
 	private axios: AxiosInstance
+	private abortController: AbortController
 
 	constructor(option: AxiosRequestConfig) {
+		this.abortController = new AbortController()
 		this.axios = axios.create(option)
 	}
 
@@ -54,6 +65,7 @@ class MusicHttp implements IHttpClass {
 			params: {
 				musicName,
 			},
+			signal: this.abortController.signal
 		});
 	}
 
@@ -63,6 +75,41 @@ class MusicHttp implements IHttpClass {
 			params: {
 				link,
 			},
+			signal: this.abortController.signal
+		})
+	}
+
+	cancel(): void {
+		this.abortController.abort()
+		this.abortController = new AbortController()
+	}
+
+	async formatData(music: Music) {
+		if (music.other?.requestlink) {
+			let {data} = await this.getSource(music.other?.requestlink!).catch(()=>{
+				return {data:{ success:false }}
+			})
+			if(data && data.success){
+				return Promise.resolve({
+					data:{
+						success:true,
+						music:{
+							...music,
+							...{
+								link:data.data.songSource
+							}
+						}
+					}
+				})
+			}else{
+				return Promise.resolve({ data:data })
+			}
+		}
+		return Promise.resolve({
+			data: {
+				success: true,
+				music:music, 
+			}
 		})
 	}
 }
