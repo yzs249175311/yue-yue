@@ -29,7 +29,7 @@
 			<font-awesome-icon icon="fa-solid fa-music" class="toggle" @click="toggleMusicPlayerButton"
 				@mouseenter="musicPlayerToggle = 'open'" />
 
-			<MusicPlayerListComVue ></MusicPlayerListComVue>
+			<MusicPlayerListComVue></MusicPlayerListComVue>
 		</div>
 	</Teleport>
 </template>
@@ -46,8 +46,8 @@ import { ElMessage } from "element-plus";
 import { storeToRefs } from "pinia";
 
 let store = useStore()
-let { musicList, musicState, currentMusicIndex, musicName, musicAuthor, currentTime, duration, currentTimeFormat, durationFormat,playMusicListVisible } = storeToRefs(store)
-let { playMusic,addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex, addMusic } = store
+let { musicList, musicState, currentMusicIndex, musicName, musicAuthor, currentTime, duration, currentTimeFormat, durationFormat, playMusicListVisible } = storeToRefs(store)
+let { playMusic, addMusicList, saveMusicList, setMusicPlayer, setCurrentMusicIndex, addMusic } = store
 
 let musicPlayerToggle = ref<"close" | "open">("close")
 
@@ -58,7 +58,7 @@ let setCurrentTime = (e: Event) => {
 }
 
 let toggleMusicPlayerButton = function () {
-	musicPlayerToggle.value = musicPlayerToggle.value == "close" ? "open":"close"
+	musicPlayerToggle.value = musicPlayerToggle.value == "close" ? "open" : "close"
 }
 
 let musicPlayPause = () => {
@@ -76,11 +76,15 @@ let musicPause = () => {
 }
 
 let musicPrev = () => {
-	playMusic(currentMusicIndex.value! - 1)
+	if(currentMusicIndex.value){
+		playMusic(currentMusicIndex.value! - 1)
+	}
 }
 
 let musicNext = () => {
-	playMusic(currentMusicIndex.value! + 1)
+	if(currentMusicIndex.value){
+		playMusic(currentMusicIndex.value! + 1)
+	}
 }
 
 let playMusicList = () => {
@@ -112,10 +116,10 @@ onMounted(() => {
 	musicController.value?.addEventListener("ended", () => {
 		musicState.value = false
 	})
-	musicController.value?.addEventListener("loadeddata", ()=>{
+	musicController.value?.addEventListener("loadeddata", () => {
 		duration.value = musicController.value!.duration
 	})
-	musicController.value?.addEventListener("timeupdate", (e:Event)=>{
+	musicController.value?.addEventListener("timeupdate", (e: Event) => {
 		currentTime.value = (<HTMLAudioElement>e.currentTarget).currentTime
 	})
 })
@@ -124,6 +128,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 $bdcolor: #d3d3d3a3;
+
 .music-container {
 	display: grid;
 	align-items: center;
@@ -133,7 +138,7 @@ $bdcolor: #d3d3d3a3;
 	width: 100%;
 	padding: 20px;
 	overflow: visible;
-	background-image: linear-gradient(to top, #fff,#f3f3f3,#fff);
+	background-image: linear-gradient(to top, #fff, #f3f3f3, #fff);
 	border-top: 1px solid $bdcolor;
 	z-index: 999;
 	transition: all 0.4s ease;

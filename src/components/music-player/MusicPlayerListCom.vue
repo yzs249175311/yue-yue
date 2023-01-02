@@ -19,8 +19,6 @@
 import { useStore } from "@/store/music/music-player"
 import { storeToRefs } from "pinia";
 
-let emits = defineEmits(["playIndex"])
-
 let store = useStore()
 let { musicList, playMusicListVisible } = storeToRefs(store)
 let {deleteMusic,saveMusicList,playMusic} = store

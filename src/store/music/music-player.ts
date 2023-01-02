@@ -65,10 +65,10 @@ export const useStore = defineStore("music-player", {
 		},
 		playMusic(music: number | Music | null) {
 			let currentMusic = null
-			if (typeof music == "number") {
+			if (typeof music == "number" && music < this.musicList.length) {
 				currentMusic = this.musicList[music]
 				this.setCurrentMusicIndex(music)
-			} else if (music?.link) {
+			} else if (music && typeof music !="number" && music?.link) {
 				currentMusic = music
 				this.setCurrentMusicIndex(null)
 			}
