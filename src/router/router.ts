@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory,createWebHashHistory } from "vue-router";
 
 const router = createRouter({
-	history: createWebHashHistory(),
+	history: createWebHistory(),
 
 	routes: [
 		{ path: "/", redirect: "/search" },
