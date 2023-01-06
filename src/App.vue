@@ -1,7 +1,8 @@
 <template>
 	<el-container>
 		<el-header id="nav">
-			<router-link :to="{                                                                                                                                                                        path:                                                                                                                                                                        '/search'                                                                                                                                                                        }">搜索</router-link>
+			<router-link
+				:to="{ path: '/search' }">搜索</router-link>
 			<a href="https://50project-practise.vercel.app/" target="_blank">练习</a>
 			<div class="music-title"></div>
 		</el-header>
@@ -24,6 +25,7 @@ import MusicPlayerCom from './components/music-player/index.vue'
 	height: 100%;
 	display: flex;
 	flex-flow: column nowrap;
+
 	.el-header {
 		display: flex;
 		flex-flow: row nowrap;
@@ -36,6 +38,7 @@ import MusicPlayerCom from './components/music-player/index.vue'
 			margin-left: auto;
 		}
 	}
+
 	.el-main {
 		display: flex;
 		justify-content: flex-start;
