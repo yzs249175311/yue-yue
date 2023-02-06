@@ -18,9 +18,7 @@
 		"noUnusedLocals": false,
 		"baseUrl": "./",
 		"paths": {
-			"@/*": [
-				"src/*"
-			]
+			"@/*": ["src/*"]
 		}
 	},
 	"include": [

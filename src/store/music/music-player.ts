@@ -17,11 +17,7 @@ export const useStore = defineStore("music-player", {
 	}),
 	getters: {
 		musicTitle: function (): string {
-			if (this.musicList.length == 0) {
-				return "未知" + " -- " + "未知"
-			} else {
-				return this.musicName + "--" + this.musicAuthor
-			}
+			return this.musicName + "--" + this.musicAuthor
 		},
 		currentTimeFormat: function (): string {
 			return formatTime(this.currentTime)

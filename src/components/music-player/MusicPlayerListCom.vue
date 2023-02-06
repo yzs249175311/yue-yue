@@ -37,6 +37,6 @@ let handlePlay = (index: number) => {
 }
 </script>
 
-<style lang="less" scoped>
+<style lang="scss" scoped>
 
 </style>

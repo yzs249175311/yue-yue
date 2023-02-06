@@ -14,7 +14,6 @@
 </template>
 
 <script setup lang="ts">
-
 import MusicPlayerCom from './components/music-player/index.vue'
 
 </script>
