@@ -19,6 +19,7 @@ import MusicPlayerCom from './components/music-player/index.vue'
 </script>
 
 <style scoped lang="scss">
+ 
 .el-container {
 	width: 100vw;
 	height: 100%;
