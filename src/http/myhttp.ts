@@ -3,16 +3,15 @@ import axios from 'axios'
 import { AxiosInstance, AxiosRequestConfig, AxiosResponse, } from "axios";
 import { Music } from "@/interface/music/music.interface"
 //const book_baseurl = "http://localhost:3000/";
-export let baseURL: string = "http://localhost:3000/"
-baseURL = "https://my-site-server-bay.vercel.app/";
+export let baseURL: string = "https://my-site-server-bay.vercel.app/"
 
-if (process.env.NODE_ENV === 'production') {
-	baseURL = "https://my-site-server-bay.vercel.app/";
+if (import.meta.env.VITE_BASE_URL) {
+	baseURL = import.meta.env.VITE_BASE_URL;
 }
 
 let option: AxiosRequestConfig = {
 	baseURL,
-	timeout:10000
+	timeout: 10000
 }
 
 
