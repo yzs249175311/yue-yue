@@ -3,7 +3,7 @@
 		<el-header id="nav">
 			<router-link
 				:to="{ path: '/search' }">搜索</router-link>
-			<a href="https://50project-practise.vercel.app/" target="_blank">练习</a>
+			<a :href="htmlProject" target="_blank">练习</a>
 			<div class="music-title"></div>
 		</el-header>
 		<el-main>
@@ -15,6 +15,8 @@
 
 <script setup lang="ts">
 import MusicPlayerCom from './components/music-player/index.vue'
+
+let htmlProject = import.meta.env.VITE_HTML_PROJECT
 
 </script>
 
@@ -42,6 +44,8 @@ import MusicPlayerCom from './components/music-player/index.vue'
 	.el-main {
 		display: flex;
 		justify-content: flex-start;
+		box-sizing: content-box;
+		overflow-y: overlay;
 	}
 
 	.el-header :nth-child(n) {
